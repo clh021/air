@@ -36,9 +36,9 @@ build: check
 	$(GO) build -ldflags '$(LDFLAGS)'
 
 .PHONY: install
-install: check
+install:
 	@echo "Installing air..."
-	@$(GO) install -ldflags '$(LDFLAGS)'
+	$(GO) install -ldflags '$(LDFLAGS)'
 
 .PHONY: release
 release: check
