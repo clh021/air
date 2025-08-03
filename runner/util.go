@@ -100,8 +100,18 @@ func cleanPath(path string) string {
 func (e *Engine) isExcludeDir(path string) bool {
 	cleanName := cleanPath(e.config.rel(path))
 	for _, d := range e.config.Build.ExcludeDir {
+		// 完全路径匹配
 		if cleanName == d {
 			return true
+		}
+
+		// 通配符模式匹配：如果配置项以 **/ 开头并以 /** 结尾，则只匹配目录名
+		if strings.HasPrefix(d, "**/") && strings.HasSuffix(d, "/**") {
+			dirName := strings.TrimPrefix(d, "**/")
+			dirName = strings.TrimSuffix(dirName, "/**")
+			if filepath.Base(cleanName) == dirName {
+				return true
+			}
 		}
 	}
 	return false
